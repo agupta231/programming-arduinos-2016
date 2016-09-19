@@ -33,6 +33,15 @@ void loop() {
 
   // reverse the direction of the fading at the ends of the fade:
   if (brightness <= 0 || brightness >= 255) {
+    if(brightness >= 255) {
+      for(int i = 0; i < 5; i++) {
+        analogWrite(led, 255);
+        delay(500);
+  
+        analogWrite(led, 0);
+        delay(500);
+      }
+    }
     fadeAmount = -fadeAmount;
   }
   // wait for 30 milliseconds to see the dimming effect
