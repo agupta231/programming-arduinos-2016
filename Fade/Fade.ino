@@ -13,37 +13,60 @@
  This example code is in the public domain.
  */
 
-int led = 9;           // the PWM pin the LED is attached to
-int brightness = 0;    // how bright the LED is
-int fadeAmount = 5;    // how many points to fade the LED by
+int led1 = 9;
+int led2 = 10;
+int led3 = 11;
+int brightness = 0;   
+int fadeAmount = 5;
+int counter = 0;
+
+bool led2Run = HIGH;
+bool led3Run = LOW;
 
 // the setup routine runs once when you press reset:
 void setup() {
   // declare pin 9 to be an output:
-  pinMode(led, OUTPUT);
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+  Serial.begin(9600);
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // set the brightness of pin 9:
-  analogWrite(led, brightness);
+  analogWrite(led1, brightness);
+  digitalWrite(led2, led2Run);
+  digitalWrite(led3, led3Run);
 
   // change the brightness for next time through the loop:
+  counter += 1;
   brightness = brightness + fadeAmount;
 
   // reverse the direction of the fading at the ends of the fade:
   if (brightness <= 0 || brightness >= 255) {
-    if(brightness >= 255) {
-      for(int i = 0; i < 5; i++) {
-        analogWrite(led, 255);
-        delay(500);
-  
-        analogWrite(led, 0);
-        delay(500);
-      }
-    }
     fadeAmount = -fadeAmount;
   }
-  // wait for 30 milliseconds to see the dimming effect
+
+  if(counter % 30 == 0) {
+    if(led2Run == HIGH) {
+      led2Run = LOW;
+    }
+    else {
+      led2Run = HIGH;
+    }
+  }
+
+  if(counter % 25 == 0) {
+    if(led3Run == HIGH) {
+        led3Run = LOW;
+      }
+      else {
+        led3Run = HIGH;
+      }
+  }
+
+  Serial.println(counter);
+  
   delay(30);
 }
